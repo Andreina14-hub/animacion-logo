@@ -24,22 +24,30 @@
             overflow: hidden;
         }
 
-        .logo-container {
-            width: 90vw;
-            height: 90vh;
-            margin: auto;
+        .container {
+            /* height: 100vh; */
+            width: 100vw;
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
+            justify-content: center;
+            align-items: center;
+            gap: 25vh;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
             overflow: hidden;
-
+            width: 100%;
         }
 
         .logo {
             position: fixed;
             display: flex;
-            height: 50%;
+            /* height: 50%; */
             justify-content: center;
             align-items: center;
             font-size: 5rem;
@@ -75,10 +83,10 @@
 
         .promo-text {
             font-size: 2rem;
-            margin: 25px auto;
-            min-height: 60px;
             text-align: center;
-            transition: color 1s ease, text-shadow 1s ease;
+            margin-top: 3vh;
+            transition: color 2s ease, text-shadow 2s ease;
+            width: 100%;
         }
 
         .controls {
@@ -110,111 +118,112 @@
             <div class="beat" id="beat-2"></div>
             <div class="beat" id="beat-3"></div>
             <div class="beat" id="beat-4"></div>
+
+
+            <div class="logo-container">
+                <div class="logo logo-1 active"><img src="img/logo1.png" alt=""></div>
+                <div class="logo logo-2"><img src="img/logo2.png" alt=""></div>
+                <div class="logo logo-3"><img src="img/logo3.png" alt=""></div>
+                <div class="logo logo-4"><img src="img/logo4.png" alt=""></div>
+            </div>
         </div>
-
-        <div class="logo-container">
-            <div class="logo logo-1 active"><img src="img/logo1.png" alt=""></div>
-            <div class="logo logo-2"><img src="img/logo2.png" alt=""></div>
-            <div class="logo logo-3"><img src="img/logo3.png" alt=""></div>
-            <div class="logo logo-4"><img src="img/logo4.png" alt=""></div>
+        <div class="container-promo">
+            <div class="promo-text" id="promo-text">Telegram</div>
         </div>
+    </div>
 
-        <div class="promo-text" id="promo-text">Telegram</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Configuración
+            const bpm = 128;
+            const beatInterval = (60 / bpm) * 1000; // en milisegundos
+            let currentBeat = 0;
 
+            // Textos promocionales con sus tipos
+            const promoTexts = [
+                { text: "Sígueme en Telegram", type: "telegram" },
+                { text: "t.me/edmlinares", type: "telegram" },
+                { text: "https://linktr.ee/carlosnewmusic", type: "linktree" }
+            ];
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Configuración
-                const bpm = 128;
-                const beatInterval = (60 / bpm) * 1000; // en milisegundos
-                let currentBeat = 0;
+            // Elementos DOM
+            const beats = document.querySelectorAll('.beat');
+            const logos = document.querySelectorAll('.logo');
+            const promoText = document.getElementById('promo-text');
+            const fullscreenBtn = document.getElementById('fullscreen');
 
-                // Textos promocionales con sus tipos
-                const promoTexts = [
-                    { text: "Sígueme en Telegram", type: "telegram" },
-                    { text: "t.me/edmlinares", type: "telegram" },
-                    { text: "linktr.ee", type: "linktree" },
-                    { text: "https://linktr.ee/carlosnewmusic", type: "linktree" }
-                ];
+            // Variable para controlar el orden de los textos promocionales
+            let promoIndex = 0;
 
-                // Elementos DOM
-                const beats = document.querySelectorAll('.beat');
-                const logos = document.querySelectorAll('.logo');
-                const promoText = document.getElementById('promo-text');
-                const fullscreenBtn = document.getElementById('fullscreen');
+            // Función para cambiar el texto promocional con colores
+            function promotext() {
+                const selectedPromo = promoTexts[promoIndex];
 
-                // Variable para controlar el orden de los textos promocionales
-                let promoIndex = 0;
+                promoText.textContent = selectedPromo.text;
 
-                // Función para cambiar el texto promocional con colores
-                function promotext() {
-                    const selectedPromo = promoTexts[promoIndex];
-
-                    promoText.textContent = selectedPromo.text;
-
-                    // Aplicar colores según el tipo
-                    if (selectedPromo.type === "telegram") {
-                        promoText.style.color = "#0088cc"; // Azul de Telegram
-                        promoText.style.textShadow = "0 0 10px rgba(0, 136, 204, 0.7)";
-                    } else if (selectedPromo.type === "linktree") {
-                        promoText.style.color = "#ff69b4"; // Rosa para Linktree
-                        promoText.style.textShadow = "0 0 10px rgba(255, 105, 180, 0.7)";
-                    }
-
-                    // Avanzar al siguiente texto (ciclo 0-3)
-                    promoIndex = (promoIndex + 1) % promoTexts.length;
+                // Aplicar colores según el tipo
+                if (selectedPromo.type === "telegram") {
+                    promoText.style.color = "#0088cc"; // Azul de Telegram
+                    promoText.style.textShadow = "0 0 10px rgba(0, 136, 204, 0.7)";
+                } else if (selectedPromo.type === "linktree") {
+                    promoText.style.color = "#ff69b4"; // Rosa para Linktree
+                    promoText.style.textShadow = "0 0 10px rgba(255, 105, 180, 0.7)";
                 }
 
-
-                // Actualizar la visualización
-                function updateDisplay() {
-                    // Reiniciar beats y logos activos
-                    beats.forEach(beat => beat.classList.remove('active'));
-                    logos.forEach(logo => logo.classList.remove('active'));
-
-                    // Activar beat y logo actual
-                    beats[currentBeat].classList.add('active');
-                    logos[currentBeat].classList.add('active');
-
-                    // Efecto de pulso en el contenedor de logo
-                    document.querySelector('.logo-container').classList.add('pulse');
-                    setTimeout(() => {
-                        document.querySelector('.logo-container').classList.remove('pulse');
-                    }, 200);
+                // Avanzar al siguiente texto (ciclo 0-3)
+                promoIndex = (promoIndex + 1) % promoTexts.length;
+            }
 
 
+            // Actualizar la visualización
+            function updateDisplay() {
+                // Reiniciar beats y logos activos
+                beats.forEach(beat => beat.classList.remove('active'));
+                logos.forEach(logo => logo.classList.remove('active'));
 
-                    // Cambiar texto promocional en el primer beat
-                    if (currentBeat === 0) {
-                        promotext();
-                    }
+                // Activar beat y logo actual
+                beats[currentBeat].classList.add('active');
+                logos[currentBeat].classList.add('active');
 
-                    // Incrementar beat (ciclo 0-3)
-                    currentBeat = (currentBeat + 1) % 4;
+                // Efecto de pulso en el contenedor de logo
+                document.querySelector('.logo-container').classList.add('pulse');
+                setTimeout(() => {
+                    document.querySelector('.logo-container').classList.remove('pulse');
+                }, 200);
+
+
+
+                // Cambiar texto promocional en el primer beat
+                if (currentBeat === 0) {
+                    promotext();
                 }
 
-                // Inicializar el primer texto promocional
-                promotext();
+                // Incrementar beat (ciclo 0-3)
+                currentBeat = (currentBeat + 1) % 4;
+            }
 
-                // Iniciar metrónomo
-                let metronomeInterval = setInterval(updateDisplay, beatInterval);
+            // Inicializar el primer texto promocional
+            promotext();
 
-                // Controladores de eventos
-                fullscreenBtn.addEventListener('click', function () {
-                    if (!document.fullscreenElement) {
-                        document.documentElement.requestFullscreen().catch(err => {
-                            console.log(`Error al intentar entrar en modo pantalla completa: ${err.message}`);
-                        });
-                    } else {
-                        if (document.exitFullscreen) {
-                            document.exitFullscreen();
-                        }
+            // Iniciar metrónomo
+            let metronomeInterval = setInterval(updateDisplay, beatInterval);
+
+            // Controladores de eventos
+            fullscreenBtn.addEventListener('click', function () {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.log(`Error al intentar entrar en modo pantalla completa: ${err.message}`);
+                    });
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
                     }
-                });
-
-
+                }
             });
-        </script>
+
+
+        });
+    </script>
 </body>
 
 </html>
