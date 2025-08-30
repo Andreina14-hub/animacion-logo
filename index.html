@@ -125,7 +125,6 @@
                 // Configuración
                 const bpm = 128;
                 const beatInterval = (60 / bpm) * 1000; // en milisegundos
-                let soundEnabled = true;
                 let currentBeat = 0;
 
                 // Textos promocionales con sus tipos
@@ -140,11 +139,7 @@
                 const beats = document.querySelectorAll('.beat');
                 const logos = document.querySelectorAll('.logo');
                 const promoText = document.getElementById('promo-text');
-                const toggleSoundBtn = document.getElementById('toggleSound');
                 const fullscreenBtn = document.getElementById('fullscreen');
-
-                // Crear contexto de audio
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
                 // Variable para controlar el orden de los textos promocionales
                 let promoIndex = 0;
@@ -168,23 +163,6 @@
                     promoIndex = (promoIndex + 1) % promoTexts.length;
                 }
 
-                // // Crear sonido de metrónomo
-                // function createMetronomeSound() {
-                //     const oscillator = audioContext.createOscillator();
-                //     const gainNode = audioContext.createGain();
-
-                //     oscillator.type = 'square';
-                //     oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-
-                //     gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
-                //     gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
-
-                //     oscillator.connect(gainNode);
-                //     gainNode.connect(audioContext.destination);
-
-                //     oscillator.start();
-                //     oscillator.stop(audioContext.currentTime + 0.1);
-                // }
 
                 // Actualizar la visualización
                 function updateDisplay() {
@@ -202,10 +180,7 @@
                         document.querySelector('.logo-container').classList.remove('pulse');
                     }, 200);
 
-                    // Reproducir sonido
-                    if (soundEnabled) {
-                        createMetronomeSound();
-                    }
+
 
                     // Cambiar texto promocional en el primer beat
                     if (currentBeat === 0) {
@@ -223,11 +198,6 @@
                 let metronomeInterval = setInterval(updateDisplay, beatInterval);
 
                 // Controladores de eventos
-                toggleSoundBtn.addEventListener('click', function () {
-                    soundEnabled = !soundEnabled;
-                    toggleSoundBtn.textContent = soundEnabled ? '🔇 Silenciar Sonido' : '🔊 Activar Sonido';
-                });
-
                 fullscreenBtn.addEventListener('click', function () {
                     if (!document.fullscreenElement) {
                         document.documentElement.requestFullscreen().catch(err => {
@@ -240,12 +210,7 @@
                     }
                 });
 
-                // Para dispositivos móviles: iniciar el contexto de audio con la primera interacción del usuario
-                document.body.addEventListener('click', function () {
-                    if (audioContext.state === 'suspended') {
-                        audioContext.resume();
-                    }
-                }, { once: true });
+
             });
         </script>
 </body>
